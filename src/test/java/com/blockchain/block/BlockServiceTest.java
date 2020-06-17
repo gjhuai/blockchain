@@ -9,6 +9,9 @@ import org.junit.Test;
 import com.alibaba.fastjson.JSON;
 import com.blockchain.model.Block;
 import com.blockchain.model.Transaction;
+import com.blockchain.model.TransactionInput;
+import com.blockchain.model.TransactionOutput;
+import com.blockchain.model.Wallet;
 import com.blockchain.security.CryptoUtil;
 
 /**
@@ -34,10 +37,23 @@ public class BlockServiceTest {
 		List<Transaction> txs = new ArrayList<>();
 		Transaction tx1 = new Transaction();
 		Transaction tx2 = new Transaction();
-		Transaction tx3 = new Transaction();
 		txs.add(tx1);
 		txs.add(tx2);
+		
+		//交易发起方
+		Wallet walletSender = Wallet.generateWallet();
+		//交易接收方
+		Wallet walletReciptent = Wallet.generateWallet();
+		
+		TransactionInput txIn = new TransactionInput(tx2.getId(), 10, null, walletSender.getPublicKey());
+		TransactionOutput txOut = new TransactionOutput(10, walletReciptent.getHashPubKey());
+		Transaction tx3 = new Transaction(CryptoUtil.UUID(), txIn , txOut);
+		
+		//假定tx2之前已经被打包进区块，也就是已经被记录进账本了
+		tx3.sign(walletSender.getPrivateKey(), tx2);
 		txs.add(tx3);
+		
+		
 		//加入系统奖励的交易
 		Transaction sysTx = new Transaction();
 		txs.add(sysTx);
@@ -59,6 +75,12 @@ public class BlockServiceTest {
 		Block newBlock = new Block(latestBlock.getIndex() + 1, System.currentTimeMillis(), txs, nonce, latestBlock.getHash(), hash);
 		blockchain.add(newBlock);
 		System.out.println("挖矿后的区块链：" + JSON.toJSONString(blockchain));
+	}
+	
+	@Test
+	public void testGenWallet() throws Exception {
+		Wallet wallet = Wallet.generateWallet();
+		System.out.println(JSON.toJSON(wallet));
 	}
 	
 

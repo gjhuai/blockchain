@@ -80,7 +80,7 @@ public class Transaction {
 			return;
 		}
 
-		if (!prevTx.getId().equals(getTxIn().getTxId())) {
+		if (!prevTx.getId().equals(txIn.getTxId())) {
 			System.err.println("交易签名失败：当前交易输入引用的前一笔交易与传入的前一笔交易不匹配");
 		}
 
