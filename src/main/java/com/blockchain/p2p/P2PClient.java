@@ -39,7 +39,7 @@ public class P2PClient {
 
 				@Override
 				public void onClose(int i, String msg, boolean b) {
-					System.out.println("connection failed");
+					System.out.println("connection closed");
 					p2pService.getSockets().remove(this);
 				}
 
