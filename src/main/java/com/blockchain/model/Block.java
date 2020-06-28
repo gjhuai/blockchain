@@ -1,5 +1,9 @@
 package com.blockchain.model;
 
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
+
 import java.util.List;
 
 /**
@@ -8,20 +12,24 @@ import java.util.List;
  * @author aaron
  *
  */
+@Data
 public class Block {
 
 	/**
 	 * 区块索引号
 	 */
-	private int index;
+	@NonNull
+	private Integer index;
 	/**
 	 * 当前区块的hash值,区块唯一标识
 	 */
+	@NonNull
 	private String hash;
 	/**
 	 * 生成区块的时间戳
 	 */
-	private long timestamp;
+	@NonNull
+	private Long timestamp;
 	/**
 	 * 当前区块的交易集合
 	 */
@@ -29,7 +37,8 @@ public class Block {
 	/**
 	 * 工作量证明，计算正确hash值的次数
 	 */
-	private int nonce;
+	@NonNull
+	private Integer nonce;
 	/**
 	 * 前一个区块的hash值
 	 */
@@ -49,51 +58,4 @@ public class Block {
 		this.hash = hash;
 	}
 
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public List<Transaction> getTransactions() {
-		return transactions;
-	}
-
-	public void setTransactions(List<Transaction> transactions) {
-		this.transactions = transactions;
-	}
-
-	public int getNonce() {
-		return nonce;
-	}
-
-	public void setNonce(int nonce) {
-		this.nonce = nonce;
-	}
-
-	public String getPreviousHash() {
-		return previousHash;
-	}
-
-	public void setPreviousHash(String previousHash) {
-		this.previousHash = previousHash;
-	}
-
-	public String getHash() {
-		return hash;
-	}
-
-	public void setHash(String hash) {
-		this.hash = hash;
-	}
 }
