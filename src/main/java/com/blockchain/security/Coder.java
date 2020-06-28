@@ -1,14 +1,12 @@
 package com.blockchain.security;
 
-import java.security.MessageDigest;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import java.security.MessageDigest;
+import java.util.Base64;
 
 /**
  * 基础加密组件
@@ -39,7 +37,7 @@ public abstract class Coder {
 	 * @throws Exception
 	 */
 	public static byte[] decryptBASE64(String key) throws Exception {
-		return (new BASE64Decoder()).decodeBuffer(key);
+		return Base64.getDecoder().decode(key);
 	}
 
 	/**
@@ -50,7 +48,7 @@ public abstract class Coder {
 	 * @throws Exception
 	 */
 	public static String encryptBASE64(byte[] key) throws Exception {
-		return (new BASE64Encoder()).encodeBuffer(key);
+		return Base64.getEncoder().encodeToString(key);
 	}
 
 	/**
