@@ -34,7 +34,7 @@ public class Main {
 	 * 启动p2p服务
 	 * 
 	 * @param args
-	 * @param blockService
+	 * @param p2pService
 	 */
 	private static void startP2PServer(String[] args, P2PService p2pService) {
 		P2PServer p2pServer = new P2PServer(p2pService);

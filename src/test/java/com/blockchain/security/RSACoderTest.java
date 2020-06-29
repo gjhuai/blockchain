@@ -2,6 +2,7 @@ package com.blockchain.security;
 
 import static org.junit.Assert.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 /**
  * 非对称加密测试
  */
+@Slf4j
 public class RSACoderTest {
 	private String publicKey;
 	private String privateKey;
@@ -20,13 +22,13 @@ public class RSACoderTest {
 
 		publicKey = RSACoder.getPublicKey(keyMap);
 		privateKey = RSACoder.getPrivateKey(keyMap);
-		System.err.println("公钥: \n\r" + publicKey);
-		System.err.println("私钥： \n\r" + privateKey);
+		log.debug("公钥: \n {}", publicKey);
+		log.debug("私钥： \n {}", privateKey);
 	}
 
 	@Test
 	public void testEncrypt() throws Exception {
-		System.err.println("公钥加密——私钥解密");
+		log.debug("公钥加密——私钥解密");
 		String inputStr = "abc";
 		byte[] data = inputStr.getBytes();
 
@@ -35,7 +37,7 @@ public class RSACoderTest {
 		byte[] decodedData = RSACoder.decryptByPrivateKey(encodedData, privateKey);
 
 		String outputStr = new String(decodedData);
-		System.err.println("加密前: " + inputStr + "\n\r" + "解密后: " + outputStr);
+		log.error("加密前: {} \n解密后: {}", inputStr, outputStr);
 		assertEquals(inputStr, outputStr);
 
 	}

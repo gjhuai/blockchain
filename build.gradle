@@ -12,16 +12,12 @@ targetCompatibility=1.8
 [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
 [compileGroovy, compileTestGroovy]*.options*.encoding = "UTF-8"
 dependencies {
+    implementation "ch.qos.logback:logback-classic:1.2.3"
     implementation 'org.java-websocket:Java-WebSocket:1.5.1'
-    implementation 'org.codehaus.groovy:groovy-all:3.0.4'
     implementation 'com.alibaba:fastjson:1.2.71'
 
-    implementation 'org.eclipse.jetty:jetty-server:9.4.30.v20200611'
     implementation 'org.eclipse.jetty:jetty-servlet:9.4.30.v20200611'
-
-//    testCompile 'org.spockframework:spock-bom:2.0-M3-groovy-3.0'
-//    testCompile "org.spockframework:spock-core"
-//    testCompile "org.spockframework:spock-junit4"
+    implementation 'org.eclipse.jetty:jetty-server:9.4.30.v20200611'
     testCompile 'junit:junit:4.13'
 
     // optional dependencies for using Spock
@@ -34,6 +30,12 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+
+//    implementation 'org.codehaus.groovy:groovy-all:3.0.4'
+//    testCompile 'org.spockframework:spock-bom:2.0-M3-groovy-3.0'
+//    testCompile "org.spockframework:spock-core"
+//    testCompile "org.spockframework:spock-junit4"
 }
 
 repositories {
