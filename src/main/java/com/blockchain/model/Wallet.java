@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.blockchain.security.CryptoUtil;
 import com.blockchain.security.RSACoder;
+import lombok.Data;
 
 /**
  * 钱包
@@ -11,6 +12,7 @@ import com.blockchain.security.RSACoder;
  * @author aaron
  *
  */
+@Data
 public class Wallet {
 
 	/**
@@ -22,21 +24,6 @@ public class Wallet {
 	 */
 	private String privateKey;
 
-	public String getPublicKey() {
-		return publicKey;
-	}
-
-	public void setPublicKey(String publicKey) {
-		this.publicKey = publicKey;
-	}
-
-	public String getPrivateKey() {
-		return privateKey;
-	}
-
-	public void setPrivateKey(String privateKey) {
-		this.privateKey = privateKey;
-	}
 
 	public Wallet() {
     }

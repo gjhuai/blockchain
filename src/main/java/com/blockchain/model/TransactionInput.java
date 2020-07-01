@@ -1,11 +1,14 @@
 package com.blockchain.model;
 
+import lombok.Data;
+
 /**
  * 交易输入
  * 
  * @author aaron
  *
  */
+@Data
 public class TransactionInput {
 
 	/**
@@ -26,7 +29,6 @@ public class TransactionInput {
 	private String publicKey;
 
 	public TransactionInput() {
-		super();
 	}
 
 	public TransactionInput(String txId, int value, String signature, String publicKey) {
@@ -37,35 +39,4 @@ public class TransactionInput {
 		this.publicKey = publicKey;
 	}
 
-	public String getTxId() {
-		return txId;
-	}
-
-	public void setTxId(String txId) {
-		this.txId = txId;
-	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
-	}
-
-	public String getSignature() {
-		return signature;
-	}
-
-	public void setSignature(String signature) {
-		this.signature = signature;
-	}
-
-	public String getPublicKey() {
-		return publicKey;
-	}
-
-	public void setPublicKey(String publicKey) {
-		this.publicKey = publicKey;
-	}
 }

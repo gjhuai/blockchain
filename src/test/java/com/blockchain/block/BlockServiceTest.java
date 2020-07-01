@@ -1,8 +1,9 @@
 package com.blockchain.block;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,121 +18,66 @@ import com.blockchain.security.CryptoUtil;
 /**
  * 区块链测试
  */
+@Slf4j
 public class BlockServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
 		
 	}
-	
+
 	@Test
 	public void testBlockMine() throws Exception {
-		List<Block> blockChain = new ArrayList<Block>();
-		Block beginBlock = new Block(1, System.currentTimeMillis(), new ArrayList<Transaction>(), 1, "1", "1");
-		blockChain.add(beginBlock);
-		System.out.println(JSON.toJSON(blockChain));
-		//系统奖励的交易
-		Transaction sysTx = new Transaction();
-		//获取当前区块链里最后一个区块
-		Block lastBlock = blockChain.get(blockChain.size() - 1);
-		
+		// 创建一个空的区块链
+		val blockChain = new ArrayList<Block>();
+		// 生成创世区块
+        val beginBlock = new Block(1, System.currentTimeMillis(), new ArrayList<Transaction>(), 1, "1", "1");
+        blockChain.add(beginBlock);
+        log.debug("{}", JSON.toJSON(blockChain));
+
 		//发送者钱包
 		Wallet walletSender = Wallet.generateWallet();
 		//接收者钱包
 		Wallet walletReceiver = Wallet.generateWallet();
-		
-		
-		List<Transaction> txs = new ArrayList<Transaction>();
-		TransactionOutput txOut1 = new TransactionOutput(10, walletSender.getHashPubKey());
-		Transaction tx1 = new Transaction(CryptoUtil.UUID(), null, txOut1);
-		
-		TransactionInput txIn = new TransactionInput(tx1.getId(), 10, null, walletSender.getPublicKey());
-		TransactionOutput txOut = new TransactionOutput(10, walletReceiver.getHashPubKey());
-		Transaction tx2 = new Transaction(CryptoUtil.UUID(), txIn, txOut);
+
+		// 模拟前一个交易
+		val txOut1 = new TransactionOutput(10, walletSender.getHashPubKey());
+		val tx1 = new Transaction(CryptoUtil.UUID(), null, txOut1);
+
+		// 正常交易
+		val txIn = new TransactionInput(tx1.getId(), 10, null, walletSender.getPublicKey());
+		val txOut = new TransactionOutput(10, walletReceiver.getHashPubKey());
+		val tx2 = new Transaction(CryptoUtil.UUID(), txIn, txOut);
 		tx2.sign(walletSender.getPrivateKey(), tx1);
-		
+
+        // 构建块内tx集合
+        val txs = new ArrayList<Transaction>();
+        //系统奖励的交易
+        val sysTx = new Transaction();
 		txs.add(sysTx);
 		txs.add(tx1);
 		txs.add(tx2);
-		
+
+        //获取当前区块链里最后一个区块
+        val lastBlock = blockChain.get(blockChain.size() - 1);
+
 		String hash = "";
 		int nonce = 1;
 		while (true) {
 			//Hash = SHA256（最后一个区块的Hash + 交易记录信息 + 随机数）
 			hash = CryptoUtil.SHA256(lastBlock.getHash() + JSON.toJSONString(txs) + nonce);
-	        
+
 			if (hash.startsWith("0000")) {
-				System.out.println("正确的挖矿hash结果：" + hash + ",计算次数：" + nonce);
+				log.info("正确的挖矿hash结果：" + hash + ",计算次数：" + nonce);
 				break;
             }
-			System.out.println("错误的挖矿hash结果：" + hash);
+			log.debug("错误的挖矿hash结果：" + hash);
 			nonce++;
         }
-		
-		Block newBlock = new Block(lastBlock.getIndex() + 1, System.currentTimeMillis(), txs, nonce, lastBlock.getHash(), hash);
-		blockChain.add(newBlock);
-		System.out.println(JSON.toJSONString(blockChain));
-		
-		
-		
-	}
 
-	
-	
-	
-	
-	@Test
-	public void testBlockMine2() throws Exception {
-		//创建一个空的区块链
-		List<Block> blockchain = new ArrayList<>();
-		//生成创世区块
-		Block block = new Block(1, System.currentTimeMillis(), new ArrayList<Transaction>(), 1, "1", "1");
-		//加入创世区块到区块链里
-		blockchain.add(block);
-		System.out.println(JSON.toJSONString(blockchain));
-		
-		//创建一个空的交易结合
-		List<Transaction> txs = new ArrayList<>();
-		Transaction tx1 = new Transaction();
-		Transaction tx2 = new Transaction();
-		txs.add(tx1);
-		txs.add(tx2);
-		
-		//交易发起方
-		Wallet walletSender = Wallet.generateWallet();
-		//交易接收方
-		Wallet walletReciptent = Wallet.generateWallet();
-		
-		TransactionInput txIn = new TransactionInput(tx2.getId(), 10, null, walletSender.getPublicKey());
-		TransactionOutput txOut = new TransactionOutput(10, walletReciptent.getHashPubKey());
-		Transaction tx3 = new Transaction(CryptoUtil.UUID(), txIn , txOut);
-		
-		//假定tx2之前已经被打包进区块，也就是已经被记录进账本了
-		tx3.sign(walletSender.getPrivateKey(), tx2);
-		txs.add(tx3);
-		
-		
-		//加入系统奖励的交易
-		Transaction sysTx = new Transaction();
-		txs.add(sysTx);
-		//获取当前区块链里的最后一个区块
-		Block latestBlock = blockchain.get(blockchain.size() - 1);
-		
-		int nonce = 1;
-		String hash = "";
-		while(true){
-			hash = CryptoUtil.SHA256(latestBlock.getHash() + JSON.toJSONString(txs) + nonce);
-			if (hash.startsWith("0000")) {
-		        System.out.println("=====计算结果正确，计算次数为：" +nonce+ ",hash:" + hash);
-		        break;
-	        }
-			nonce++;
-			System.out.println("计算错误，hash:" + hash); 
-		}
-		
-		Block newBlock = new Block(latestBlock.getIndex() + 1, System.currentTimeMillis(), txs, nonce, latestBlock.getHash(), hash);
-		blockchain.add(newBlock);
-		System.out.println("挖矿后的区块链：" + JSON.toJSONString(blockchain));
+		val newBlock = new Block(lastBlock.getIndex() + 1, System.currentTimeMillis(), txs, nonce, lastBlock.getHash(), hash);
+		blockChain.add(newBlock);
+		log.info("挖矿后的区块链：" + JSON.toJSONString(blockChain));
 	}
 	
 	@Test

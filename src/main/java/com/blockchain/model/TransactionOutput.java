@@ -1,11 +1,14 @@
 package com.blockchain.model;
 
+import lombok.Data;
+
 /**
  * 交易输出
  * 
  * @author aaron
  *
  */
+@Data
 public class TransactionOutput {
 
 	/**
@@ -19,22 +22,6 @@ public class TransactionOutput {
 
 	public TransactionOutput() {
 		super();
-	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
-	}
-
-	public String getPublicKeyHash() {
-		return publicKeyHash;
-	}
-
-	public void setPublicKeyHash(String publicKeyHash) {
-		this.publicKeyHash = publicKeyHash;
 	}
 
 	public TransactionOutput(int value, String publicKeyHash) {
